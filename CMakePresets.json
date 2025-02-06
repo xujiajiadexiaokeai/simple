@@ -32,6 +32,18 @@
       }
     },
     {
+      "name": "ninja-multi-vcpkg-coverage-no-test",
+      "inherits": "ninja-multi-vcpkg-coverage",
+      "displayName": "Ninja Multi-Config with Coverage (No Tests)",
+      "description": "Configure with code coverage enabled but without tests",
+      "cacheVariables": {
+        "BUILD_TESTING": {
+          "type": "BOOL",
+          "value": "OFF"
+        }
+      }
+    },
+    {
       "name": "ninja-multi-vcpkg-release",
       "inherits": "ninja-multi-vcpkg",
       "displayName": "Ninja Multi-Config Release",

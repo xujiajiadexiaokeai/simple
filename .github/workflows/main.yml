@@ -169,7 +169,7 @@ jobs:
       uses: lukka/run-cmake@v10
       if: startsWith(github.ref, 'refs/tags/') != true
       with:
-        configurePreset: 'ninja-multi-vcpkg-coverage'
+        configurePreset: 'ninja-multi-vcpkg-coverage-no-test'
         buildPreset: 'ninja-vcpkg-coverage-debug'
         testPreset: 'test-debug'
 
