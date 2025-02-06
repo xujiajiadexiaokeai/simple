@@ -170,8 +170,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/') != true
       with:
         configurePreset: 'ninja-multi-vcpkg-coverage-no-test'
-        buildPreset: 'ninja-vcpkg-coverage-debug'
-        testPreset: 'test-debug'
+        buildPreset: 'ninja-vcpkg-coverage-no-test'
 
     - name: 'Run CMake without coverage'
       if: startsWith(github.ref, 'refs/tags/')

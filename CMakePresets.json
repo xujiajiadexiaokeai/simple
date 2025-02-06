@@ -130,6 +130,13 @@
       "configuration": "Debug"
     },
     {
+      "name": "ninja-vcpkg-coverage-no-test",
+      "configurePreset": "ninja-multi-vcpkg-coverage-no-test",
+      "displayName": "Build with Coverage (No Tests)",
+      "description": "Build with code coverage enabled but without tests",
+      "configuration": "Debug"
+    },
+    {
       "name": "ninja-vcpkg-release-minimal",
       "configurePreset": "ninja-multi-vcpkg-release",
       "displayName": "Build Release (Minimal)",
