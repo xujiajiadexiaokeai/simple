@@ -169,14 +169,14 @@ jobs:
       uses: lukka/run-cmake@v10
       if: startsWith(github.ref, 'refs/tags/') != true
       with:
-        configurePreset: 'ninja-multi-vcpkg-coverage-no-test'
+        configurePreset: 'ninja-vcpkg-coverage-no-test'
         buildPreset: 'ninja-vcpkg-coverage-no-test'
 
     - name: 'Run CMake without coverage'
       if: startsWith(github.ref, 'refs/tags/')
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'ninja-multi-vcpkg-release'
+        configurePreset: 'ninja-vcpkg-release'
         buildPreset: 'ninja-vcpkg-release-minimal'
         testPreset: 'test-release'
 

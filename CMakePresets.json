@@ -7,11 +7,11 @@
   },
   "configurePresets": [
     {
-      "name": "ninja-multi-vcpkg",
-      "displayName": "Ninja Multi-Config",
-      "description": "Configure with vcpkg toolchain and generate Ninja project files for all configurations",
+      "name": "ninja-vcpkg",
+      "displayName": "Ninja",
+      "description": "Configure with vcpkg toolchain",
       "binaryDir": "${sourceDir}/build/${presetName}",
-      "generator": "Ninja Multi-Config",
+      "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": {
           "type": "FILEPATH",
@@ -20,9 +20,9 @@
       }
     },
     {
-      "name": "ninja-multi-vcpkg-coverage",
-      "inherits": "ninja-multi-vcpkg",
-      "displayName": "Ninja Multi-Config with Coverage",
+      "name": "ninja-vcpkg-coverage",
+      "inherits": "ninja-vcpkg",
+      "displayName": "Ninja with Coverage",
       "description": "Configure with code coverage enabled",
       "cacheVariables": {
         "CODE_COVERAGE": {
@@ -32,9 +32,9 @@
       }
     },
     {
-      "name": "ninja-multi-vcpkg-coverage-no-test",
-      "inherits": "ninja-multi-vcpkg-coverage",
-      "displayName": "Ninja Multi-Config with Coverage (No Tests)",
+      "name": "ninja-vcpkg-coverage-no-test",
+      "inherits": "ninja-vcpkg-coverage",
+      "displayName": "Ninja with Coverage (No Tests)",
       "description": "Configure with code coverage enabled but without tests",
       "cacheVariables": {
         "BUILD_TESTING": {
@@ -44,9 +44,9 @@
       }
     },
     {
-      "name": "ninja-multi-vcpkg-release",
-      "inherits": "ninja-multi-vcpkg",
-      "displayName": "Ninja Multi-Config Release",
+      "name": "ninja-vcpkg-release",
+      "inherits": "ninja-vcpkg",
+      "displayName": "Ninja Release",
       "description": "Configure for release without tests",
       "cacheVariables": {
         "CODE_COVERAGE": {
@@ -67,7 +67,7 @@
       "name": "macos-ninja",
       "displayName": "macOS Ninja",
       "description": "Configure for macOS build",
-      "generator": "Ninja Multi-Config",
+      "generator": "Ninja",
       "binaryDir": "${sourceDir}/../../_temp/macos",
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": {
@@ -123,39 +123,34 @@
   ],
   "buildPresets": [
     {
-      "name": "ninja-vcpkg-coverage-debug",
-      "configurePreset": "ninja-multi-vcpkg-coverage",
-      "displayName": "Build with Coverage (Debug)",
-      "description": "Build with code coverage enabled",
-      "configuration": "Debug"
+      "name": "ninja-vcpkg-coverage",
+      "configurePreset": "ninja-vcpkg-coverage",
+      "displayName": "Build with Coverage",
+      "description": "Build with code coverage enabled"
     },
     {
       "name": "ninja-vcpkg-coverage-no-test",
-      "configurePreset": "ninja-multi-vcpkg-coverage-no-test",
+      "configurePreset": "ninja-vcpkg-coverage-no-test",
       "displayName": "Build with Coverage (No Tests)",
-      "description": "Build with code coverage enabled but without tests",
-      "configuration": "Debug"
+      "description": "Build with code coverage enabled but without tests"
     },
     {
-      "name": "ninja-vcpkg-release-minimal",
-      "configurePreset": "ninja-multi-vcpkg-release",
-      "displayName": "Build Release (Minimal)",
-      "description": "Build release version without tests",
-      "configuration": "Release"
+      "name": "ninja-vcpkg-release",
+      "configurePreset": "ninja-vcpkg-release",
+      "displayName": "Build Release",
+      "description": "Build release version without tests"
     },
     {
       "name": "macos-ninja-debug",
       "configurePreset": "macos-ninja",
       "displayName": "Build macOS (Debug)",
-      "description": "Build for macOS",
-      "configuration": "Debug"
+      "description": "Build for macOS"
     },
     {
       "name": "macos-ninja-release",
       "configurePreset": "macos-ninja",
       "displayName": "Build macOS (Release)",
-      "description": "Build for macOS",
-      "configuration": "Release"
+      "description": "Build for macOS"
     },
     {
       "name": "windows-msvc-debug",
@@ -202,8 +197,7 @@
     {
       "name": "test-debug",
       "inherits": "test-base",
-      "configurePreset": "ninja-multi-vcpkg-coverage",
-      "configuration": "Debug"
+      "configurePreset": "ninja-vcpkg-coverage"
     },
     {
       "name": "test-windows-vs16-debug",
@@ -218,28 +212,14 @@
       "configuration": "Release"
     },
     {
-      "name": "test-windows-debug",
-      "inherits": "test-base",
-      "configurePreset": "windows-msvc-vcpkg",
-      "configuration": "Debug"
-    },
-    {
-      "name": "test-windows-release",
-      "inherits": "test-base",
-      "configurePreset": "windows-msvc-vcpkg",
-      "configuration": "Release"
-    },
-    {
       "name": "test-macos-debug",
       "inherits": "test-base",
-      "configurePreset": "macos-ninja",
-      "configuration": "Debug"
+      "configurePreset": "macos-ninja"
     },
     {
       "name": "test-macos-release",
       "inherits": "test-base",
-      "configurePreset": "macos-ninja",
-      "configuration": "Release"
+      "configurePreset": "macos-ninja"
     }
   ]
 }
