@@ -46,6 +46,10 @@ jobs:
       with:
         submodules: true
 
+    # Install build tools
+    - name: Install Ninja
+      uses: seanmiddleditch/gha-setup-ninja@master
+
     # Install latest CMake
     - uses: lukka/get-cmake@latest
 
@@ -61,12 +65,12 @@ jobs:
       if: ${{ failure() || cancelled() }}
       shell: bash
 
-    - name: 'Run CMake with VS16'
+    - name: 'Run CMake'
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'windows-msvc-vs16'
-        buildPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'windows-msvc-vs16-release' || 'windows-msvc-vs16-debug' }}
-        testPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'test-windows-vs16-release' || 'test-windows-vs16-debug' }}
+        configurePreset: 'windows-ninja'
+        buildPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'windows-ninja-release' || 'windows-ninja-debug' }}
+        testPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'test-windows-release' || 'test-windows-debug' }}
 
     - name: "Check file existence"
       uses: andstor/file-existence-action@v3
@@ -274,6 +278,10 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
+
+    # Install build tools
+    - name: Install Ninja
+      run: brew install ninja
 
     # Install latest CMake
     # - uses: lukka/get-cmake@latest

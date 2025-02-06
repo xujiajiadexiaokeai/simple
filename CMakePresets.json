@@ -119,6 +119,24 @@
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
       }
+    },
+    {
+      "name": "windows-ninja",
+      "displayName": "Windows Ninja",
+      "description": "Configure with Ninja and vcpkg toolchain",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../../_temp/windows",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        }
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
     }
   ],
   "buildPresets": [
@@ -179,6 +197,18 @@
       "displayName": "Build Windows VS16 (Release)",
       "description": "Build with VS16 (Release)",
       "configuration": "Release"
+    },
+    {
+      "name": "windows-ninja-debug",
+      "configurePreset": "windows-ninja",
+      "displayName": "Build Windows Ninja (Debug)",
+      "description": "Build with Ninja (Debug)"
+    },
+    {
+      "name": "windows-ninja-release",
+      "configurePreset": "windows-ninja",
+      "displayName": "Build Windows Ninja (Release)",
+      "description": "Build with Ninja (Release)"
     }
   ],
   "testPresets": [
