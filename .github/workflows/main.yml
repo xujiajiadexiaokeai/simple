@@ -54,8 +54,6 @@ jobs:
       uses: lukka/run-vcpkg@v10
       with:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-        vcpkgJsonGlob: '**/vcpkg.json'
-        appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
 
     # Add this to prevent storing partial cache in case of failure
     - run: |
@@ -146,14 +144,12 @@ jobs:
         sudo apt-get install -y build-essential
         sudo apt-get install -y gcc g++
 
-    - uses: lukka/get-cmake@latest
+    # - uses: lukka/get-cmake@latest
 
     - name: Restore artifacts, or setup vcpkg
       uses: lukka/run-vcpkg@v10
       with:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-        vcpkgJsonGlob: '**/vcpkg.json'
-        appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
 
     - name: Install lcov
       if: startsWith(github.ref, 'refs/tags/') != true
@@ -176,6 +172,14 @@ jobs:
         configurePreset: 'ninja-multi-vcpkg-coverage'
         buildPreset: 'ninja-vcpkg-coverage-debug'
         testPreset: 'test-debug'
+
+    - name: 'Run CMake without coverage'
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: lukka/run-cmake@v10
+      with:
+        configurePreset: 'ninja-multi-vcpkg-release'
+        buildPreset: 'ninja-vcpkg-release-minimal'
+        testPreset: 'test-release'
 
     - name: 'Run CTest'
       if: ${{ startsWith(github.ref, 'refs/tags/') != true && matrix.os == 'ubuntu-latest' }}
@@ -273,15 +277,13 @@ jobs:
         submodules: true
 
     # Install latest CMake
-    - uses: lukka/get-cmake@latest
+    # - uses: lukka/get-cmake@latest
 
     # Restore from cache the previously built ports
     - name: Restore artifacts, or setup vcpkg
       uses: lukka/run-vcpkg@v10
       with:
         vcpkgDirectory: '${{ github.workspace }}/vcpkg'
-        vcpkgJsonGlob: '**/vcpkg.json'
-        appendedCacheKey: ${{ hashFiles( '**/vcpkg.json' ) }}
 
     # Add this to prevent storing partial cache in case of failure
     - run: |
@@ -305,13 +307,37 @@ jobs:
       with:
         allow_failure: true
         files: "${{ github.workspace }}/../../_temp/macos/src/libsimple.dylib, ${{ github.workspace }}/../../_temp/macos/test/dict/jieba.dict.utf8"
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    # - uses: actions/setup-python@v5
+    #   with:
+    #     python-version: '3.12' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+    # npm run
+    - name: run node example
+      working-directory: ./examples/node/
+      run: |
+        brew install python-setuptools
+        npm install
+        npm run p -- --ext_path="${{ github.workspace }}/../../_temp/macos/src/" --dict_path="${{ github.workspace }}/../../_temp/macos/test/dict/"
+        # don't run this as it's toooo slow
+        # npm run b -- --ext_path="${{ github.workspace }}/../../_temp/macos/src/" --dict_path="${{ github.workspace }}/../../_temp/macos/test/dict/"
 
+    # python run
+    # - name: run python example
+    #   working-directory: ./examples/python3/
+    #   run: |
+    #     python db_connector.py "${{ github.workspace }}/../../_temp/macos/src/libsimple"
+  
     - name: Package
       if: startsWith(github.ref, 'refs/tags/')
       run: |
-        mkdir libsimple-macos
-        cp src/libsimple.dylib cppjieba/src/cppjieba/dict/* libsimple-macos/
-        tar -czf libsimple-macos.tar.gz libsimple-macos
+        mkdir libsimple-osx-x64
+        sudo xattr -r -d com.apple.quarantine src/libsimple.dylib
+        cp -r src/libsimple.dylib test/dict libsimple-osx-x64/
+        zip -r libsimple-osx-x64.zip libsimple-osx-x64
       working-directory: "${{ github.workspace }}/../../_temp/macos"
 
     - name: Release
@@ -319,7 +345,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         draft: true
-        files: "${{ github.workspace }}/../../_temp/macos/libsimple-macos.tar.gz"
+        files: "${{ github.workspace }}/../../_temp/macos/libsimple-osx-x64.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
