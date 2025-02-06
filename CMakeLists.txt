@@ -42,7 +42,11 @@ if(BUILD_SQLITE3)
 endif()
 
 include(contrib/CMakeRC.cmake)
-cmrc_add_resource_library(PINYIN_TEXT TYPE OBJECT NAMESPACE pinyin_text contrib/pinyin.txt)
+if(MSVC)
+  cmrc_add_resource_library(PINYIN_TEXT ALIAS pinyin_text::rc NAMESPACE pinyin_text contrib/pinyin.txt)
+else()
+  cmrc_add_resource_library(PINYIN_TEXT TYPE OBJECT NAMESPACE pinyin_text contrib/pinyin.txt)
+endif()
 # https://github.com/vector-of-bool/cmrc/issues/17#issuecomment-659501280
 set_property(TARGET PINYIN_TEXT PROPERTY POSITION_INDEPENDENT_CODE ON)
 
@@ -81,4 +85,3 @@ if (NOT IOS AND BUILD_TEST_EXAMPLE)
   enable_testing()
   add_subdirectory(test)
 endif()
-
