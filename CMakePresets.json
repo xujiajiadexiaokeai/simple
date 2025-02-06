@@ -1,0 +1,226 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "ninja-multi-vcpkg",
+      "displayName": "Ninja Multi-Config",
+      "description": "Configure with vcpkg toolchain and generate Ninja project files for all configurations",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        }
+      }
+    },
+    {
+      "name": "ninja-multi-vcpkg-coverage",
+      "inherits": "ninja-multi-vcpkg",
+      "displayName": "Ninja Multi-Config with Coverage",
+      "description": "Configure with code coverage enabled",
+      "cacheVariables": {
+        "CODE_COVERAGE": {
+          "type": "BOOL",
+          "value": "ON"
+        }
+      }
+    },
+    {
+      "name": "ninja-multi-vcpkg-release",
+      "inherits": "ninja-multi-vcpkg",
+      "displayName": "Ninja Multi-Config Release",
+      "description": "Configure for release without tests",
+      "cacheVariables": {
+        "CODE_COVERAGE": {
+          "type": "BOOL",
+          "value": "OFF"
+        },
+        "BUILD_SHELL": {
+          "type": "BOOL",
+          "value": "OFF"
+        },
+        "BUILD_TEST_EXAMPLE": {
+          "type": "BOOL",
+          "value": "OFF"
+        }
+      }
+    },
+    {
+      "name": "macos-ninja",
+      "displayName": "macOS Ninja",
+      "description": "Configure for macOS build",
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/../../_temp/macos",
+      "cacheVariables": {
+        "CMAKE_INSTALL_PREFIX": {
+          "type": "PATH",
+          "value": "${sourceDir}/../../_temp/macos/install"
+        }
+      }
+    },
+    {
+      "name": "windows-msvc-vcpkg",
+      "displayName": "Windows MSVC",
+      "description": "Configure with MSVC and vcpkg toolchain",
+      "generator": "Visual Studio 17 2022",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "binaryDir": "${sourceDir}/../../_temp/windows",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        }
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-msvc-vs16",
+      "displayName": "Windows MSVC VS16",
+      "description": "Configure with VS16 and vcpkg toolchain (legacy support)",
+      "generator": "Visual Studio 16 2019",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "binaryDir": "${sourceDir}/../../_temp/windows",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        }
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja-vcpkg-coverage-debug",
+      "configurePreset": "ninja-multi-vcpkg-coverage",
+      "displayName": "Build with Coverage (Debug)",
+      "description": "Build with code coverage enabled",
+      "configuration": "Debug"
+    },
+    {
+      "name": "ninja-vcpkg-release-minimal",
+      "configurePreset": "ninja-multi-vcpkg-release",
+      "displayName": "Build Release (Minimal)",
+      "description": "Build release version without tests",
+      "configuration": "Release"
+    },
+    {
+      "name": "macos-ninja-debug",
+      "configurePreset": "macos-ninja",
+      "displayName": "Build macOS (Debug)",
+      "description": "Build for macOS",
+      "configuration": "Debug"
+    },
+    {
+      "name": "macos-ninja-release",
+      "configurePreset": "macos-ninja",
+      "displayName": "Build macOS (Release)",
+      "description": "Build for macOS",
+      "configuration": "Release"
+    },
+    {
+      "name": "windows-msvc-debug",
+      "configurePreset": "windows-msvc-vcpkg",
+      "displayName": "Build Windows (Debug)",
+      "description": "Build with MSVC (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-msvc-release",
+      "configurePreset": "windows-msvc-vcpkg",
+      "displayName": "Build Windows (Release)",
+      "description": "Build with MSVC (Release)",
+      "configuration": "Release"
+    },
+    {
+      "name": "windows-msvc-vs16-debug",
+      "configurePreset": "windows-msvc-vs16",
+      "displayName": "Build Windows VS16 (Debug)",
+      "description": "Build with VS16 (Debug)",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-msvc-vs16-release",
+      "configurePreset": "windows-msvc-vs16",
+      "displayName": "Build Windows VS16 (Release)",
+      "description": "Build with VS16 (Release)",
+      "configuration": "Release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test-base",
+      "hidden": true,
+      "output": {
+        "outputOnFailure": true,
+        "verbosity": "verbose"
+      },
+      "execution": {
+        "noTestsAction": "error",
+        "stopOnFailure": true
+      }
+    },
+    {
+      "name": "test-debug",
+      "inherits": "test-base",
+      "configurePreset": "ninja-multi-vcpkg-coverage",
+      "configuration": "Debug"
+    },
+    {
+      "name": "test-windows-vs16-debug",
+      "inherits": "test-base",
+      "configurePreset": "windows-msvc-vs16",
+      "configuration": "Debug"
+    },
+    {
+      "name": "test-windows-vs16-release",
+      "inherits": "test-base",
+      "configurePreset": "windows-msvc-vs16",
+      "configuration": "Release"
+    },
+    {
+      "name": "test-windows-debug",
+      "inherits": "test-base",
+      "configurePreset": "windows-msvc-vcpkg",
+      "configuration": "Debug"
+    },
+    {
+      "name": "test-windows-release",
+      "inherits": "test-base",
+      "configurePreset": "windows-msvc-vcpkg",
+      "configuration": "Release"
+    },
+    {
+      "name": "test-macos-debug",
+      "inherits": "test-base",
+      "configurePreset": "macos-ninja",
+      "configuration": "Debug"
+    },
+    {
+      "name": "test-macos-release",
+      "inherits": "test-base",
+      "configurePreset": "macos-ninja",
+      "configuration": "Release"
+    }
+  ]
+}
