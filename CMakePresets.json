@@ -10,7 +10,7 @@
       "name": "ninja-vcpkg",
       "displayName": "Ninja",
       "description": "Configure with vcpkg toolchain",
-      "binaryDir": "${sourceDir}/build/${presetName}",
+      "binaryDir": "${sourceDir}/build",
       "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": {

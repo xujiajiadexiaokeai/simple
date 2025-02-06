@@ -168,6 +168,9 @@ jobs:
     - name: 'Run CMake'
       uses: lukka/run-cmake@v10
       if: startsWith(github.ref, 'refs/tags/') != true
+      with:
+        configurePreset: 'ninja-vcpkg-coverage-no-test'
+        buildPreset: 'ninja-vcpkg-coverage-no-test'
 
     - name: 'Run CMake without coverage'
       if: startsWith(github.ref, 'refs/tags/')
