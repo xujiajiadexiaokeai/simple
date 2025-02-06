@@ -21,12 +21,5 @@
       "version": "3.45.0"
     }
   ],
-  "supports": "!(arm|uwp)",
-  "vcpkg-configuration": {
-    "default-registry": {
-      "kind": "git",
-      "repository": "https://github.com/microsoft/vcpkg",
-      "baseline": "501db0f17ef6df184fcdbfbe0f87cde2313b6ab1"
-    }
-  }
+  "supports": "!(arm|uwp)"
 }
