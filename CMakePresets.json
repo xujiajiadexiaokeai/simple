@@ -88,6 +88,10 @@
         "CMAKE_TOOLCHAIN_FILE": {
           "type": "FILEPATH",
           "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
+        },
+        "BUILD_TESTING": {
+          "type": "BOOL",
+          "value": "OFF"
         }
       },
       "condition": {
