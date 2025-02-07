@@ -22,21 +22,13 @@
     {
       "name": "ninja-vcpkg-coverage",
       "inherits": "ninja-vcpkg",
-      "displayName": "Ninja with Coverage",
+      "displayName": "Ninja Coverage",
       "description": "Configure with code coverage enabled",
       "cacheVariables": {
         "CODE_COVERAGE": {
           "type": "BOOL",
           "value": "ON"
-        }
-      }
-    },
-    {
-      "name": "ninja-vcpkg-coverage-no-test",
-      "inherits": "ninja-vcpkg-coverage",
-      "displayName": "Ninja with Coverage (No Tests)",
-      "description": "Configure with code coverage enabled but without tests",
-      "cacheVariables": {
+        },
         "BUILD_TESTING": {
           "type": "BOOL",
           "value": "OFF"
@@ -99,81 +91,40 @@
         "lhs": "${hostSystemName}",
         "rhs": "Windows"
       }
-    },
-    {
-      "name": "windows-msvc-vcpkg",
-      "displayName": "Windows MSVC",
-      "description": "Configure with MSVC and vcpkg toolchain",
-      "generator": "Visual Studio 17 2022",
-      "architecture": {
-        "value": "x64",
-        "strategy": "external"
-      },
-      "binaryDir": "${sourceDir}/../../_temp/windows",
-      "cacheVariables": {
-        "CMAKE_TOOLCHAIN_FILE": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/vcpkg/scripts/buildsystems/vcpkg.cmake"
-        }
-      },
-      "condition": {
-        "type": "equals",
-        "lhs": "${hostSystemName}",
-        "rhs": "Windows"
-      }
     }
   ],
   "buildPresets": [
     {
+      "name": "ninja-vcpkg-release",
+      "configurePreset": "ninja-vcpkg",
+      "displayName": "Build Release",
+      "description": "Build release version",
+      "configuration": "Release"
+    },
+    {
       "name": "ninja-vcpkg-coverage",
       "configurePreset": "ninja-vcpkg-coverage",
-      "displayName": "Build with Coverage",
-      "description": "Build with code coverage enabled"
+      "displayName": "Build Coverage",
+      "description": "Build with coverage enabled"
     },
     {
-      "name": "ninja-vcpkg-coverage-no-test",
-      "configurePreset": "ninja-vcpkg-coverage-no-test",
-      "displayName": "Build with Coverage (No Tests)",
-      "description": "Build with code coverage enabled but without tests"
-    },
-    {
-      "name": "ninja-vcpkg-release",
-      "configurePreset": "ninja-vcpkg-release",
-      "displayName": "Build Release",
-      "description": "Build release version without tests"
-    },
-    {
-      "name": "macos-ninja-debug",
+      "name": "macos-ninja",
       "configurePreset": "macos-ninja",
-      "displayName": "Build macOS (Debug)",
+      "displayName": "Build macOS",
       "description": "Build for macOS"
     },
     {
       "name": "macos-ninja-release",
       "configurePreset": "macos-ninja",
       "displayName": "Build macOS (Release)",
-      "description": "Build for macOS"
-    },
-    {
-      "name": "windows-msvc-debug",
-      "configurePreset": "windows-msvc-vcpkg",
-      "displayName": "Build Windows (Debug)",
-      "description": "Build with MSVC (Debug)",
-      "configuration": "Debug"
-    },
-    {
-      "name": "windows-msvc-release",
-      "configurePreset": "windows-msvc-vcpkg",
-      "displayName": "Build Windows (Release)",
-      "description": "Build with MSVC (Release)",
+      "description": "Build for macOS (Release)",
       "configuration": "Release"
     },
     {
-      "name": "windows-msvc-vs17-debug",
+      "name": "windows-msvc-vs17",
       "configurePreset": "windows-msvc-vs17",
-      "displayName": "Build Windows VS17 (Debug)",
-      "description": "Build with VS17 (Debug)",
-      "configuration": "Debug"
+      "displayName": "Build Windows VS17",
+      "description": "Build with VS17"
     },
     {
       "name": "windows-msvc-vs17-release",
@@ -181,47 +132,6 @@
       "displayName": "Build Windows VS17 (Release)",
       "description": "Build with VS17 (Release)",
       "configuration": "Release"
-    }
-  ],
-  "testPresets": [
-    {
-      "name": "test-base",
-      "hidden": true,
-      "output": {
-        "outputOnFailure": true,
-        "verbosity": "verbose"
-      },
-      "execution": {
-        "noTestsAction": "error",
-        "stopOnFailure": true
-      }
-    },
-    {
-      "name": "test-debug",
-      "inherits": "test-base",
-      "configurePreset": "ninja-vcpkg-coverage"
-    },
-    {
-      "name": "test-windows-vs17-debug",
-      "inherits": "test-base",
-      "configurePreset": "windows-msvc-vs17",
-      "configuration": "Debug"
-    },
-    {
-      "name": "test-windows-vs17-release",
-      "inherits": "test-base",
-      "configurePreset": "windows-msvc-vs17",
-      "configuration": "Release"
-    },
-    {
-      "name": "test-macos-debug",
-      "inherits": "test-base",
-      "configurePreset": "macos-ninja"
-    },
-    {
-      "name": "test-macos-release",
-      "inherits": "test-base",
-      "configurePreset": "macos-ninja"
     }
   ]
 }
