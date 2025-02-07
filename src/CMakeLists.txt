@@ -17,21 +17,21 @@ if(SIMPLE_WITH_JIEBA)
 endif()
 
 set(SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/pinyin.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/simple_highlight.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/simple_tokenizer.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/pinyin.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/simple_highlight.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/simple_tokenizer.cc
-    ${CMAKE_CURRENT_SOURCE_DIR}/entry.cc
+    pinyin.h
+    simple_highlight.h
+    simple_tokenizer.h
+    pinyin.cc
+    simple_highlight.cc
+    simple_tokenizer.cc
+    entry.cc
 )
 
 OPTION(BUILD_STATIC "Option to build static lib" OFF)
 if (IOS OR BUILD_STATIC)
-  # iOS only support static library.
-  add_library(simple STATIC ${SOURCE_FILES})
+# iOS only support static library.
+add_library(simple STATIC ${SOURCE_FILES})
 else()
-  add_library(simple SHARED ${SOURCE_FILES})
+add_library(simple SHARED ${SOURCE_FILES})
 endif()
 
 if(SIMPLE_WITH_JIEBA)
@@ -39,15 +39,9 @@ if(SIMPLE_WITH_JIEBA)
   include_directories(${SQLITE3_HEADERS_DIR} ${source_dir}/include ${source_dir}/deps)
   target_include_directories(simple INTERFACE ${SQLITE3_HEADERS_DIR} ${source_dir}/include ${source_dir}/deps)
   # for tests only
-  if(MSVC)
-    add_custom_command(TARGET simple PRE_BUILD
-                      COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/test/dict
-                      COMMAND ${CMAKE_COMMAND} -E copy_directory ${source_dir}/dict ${CMAKE_BINARY_DIR}/test/dict)
-  else()
-    add_custom_command(TARGET simple PRE_BUILD
-                      COMMAND ${CMAKE_COMMAND} -E copy_directory
-                      ${source_dir}/dict/ $<TARGET_FILE_DIR:simple>/../test/dict/)
-  endif()
+  add_custom_command(TARGET simple PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E copy_directory
+                     ${source_dir}/dict/ $<TARGET_FILE_DIR:simple>/../test/dict/)
   INSTALL(DIRECTORY ${source_dir}/dict/ DESTINATION bin/dict FILES_MATCHING PATTERN "*.utf8")
 else()
   include_directories(${SQLITE3_HEADERS_DIR})
