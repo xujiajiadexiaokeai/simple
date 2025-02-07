@@ -80,7 +80,7 @@
       "name": "windows-msvc-vs16",
       "displayName": "Visual Studio 16 2019",
       "description": "Configure with VS16 and vcpkg toolchain",
-      "generator": "Visual Studio 16 2019 Win64",
+      "generator": "Visual Studio 16 2019",
       "architecture": "x64",
       "toolset": "v142",
       "binaryDir": "${sourceDir}/../../_temp/windows",
