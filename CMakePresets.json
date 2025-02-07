@@ -77,12 +77,12 @@
       }
     },
     {
-      "name": "windows-msvc-vs16",
-      "displayName": "Visual Studio 16 2019",
-      "description": "Configure with VS16 and vcpkg toolchain",
-      "generator": "Visual Studio 16 2019",
+      "name": "windows-msvc-vs17",
+      "displayName": "Visual Studio 17 2022",
+      "description": "Configure with VS17 and vcpkg toolchain",
+      "generator": "Visual Studio 17 2022",
       "architecture": "x64",
-      "toolset": "v142",
+      "toolset": "v143",
       "binaryDir": "${sourceDir}/../../_temp/windows",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": {
@@ -165,17 +165,17 @@
       "configuration": "Release"
     },
     {
-      "name": "windows-msvc-vs16-debug",
-      "configurePreset": "windows-msvc-vs16",
-      "displayName": "Build Windows VS16 (Debug)",
-      "description": "Build with VS16 (Debug)",
+      "name": "windows-msvc-vs17-debug",
+      "configurePreset": "windows-msvc-vs17",
+      "displayName": "Build Windows VS17 (Debug)",
+      "description": "Build with VS17 (Debug)",
       "configuration": "Debug"
     },
     {
-      "name": "windows-msvc-vs16-release",
-      "configurePreset": "windows-msvc-vs16",
-      "displayName": "Build Windows VS16 (Release)",
-      "description": "Build with VS16 (Release)",
+      "name": "windows-msvc-vs17-release",
+      "configurePreset": "windows-msvc-vs17",
+      "displayName": "Build Windows VS17 (Release)",
+      "description": "Build with VS17 (Release)",
       "configuration": "Release"
     }
   ],
@@ -198,15 +198,15 @@
       "configurePreset": "ninja-vcpkg-coverage"
     },
     {
-      "name": "test-windows-vs16-debug",
+      "name": "test-windows-vs17-debug",
       "inherits": "test-base",
-      "configurePreset": "windows-msvc-vs16",
+      "configurePreset": "windows-msvc-vs17",
       "configuration": "Debug"
     },
     {
-      "name": "test-windows-vs16-release",
+      "name": "test-windows-vs17-release",
       "inherits": "test-base",
-      "configurePreset": "windows-msvc-vs16",
+      "configurePreset": "windows-msvc-vs17",
       "configuration": "Release"
     },
     {

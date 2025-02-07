@@ -64,9 +64,9 @@ jobs:
     - name: 'Run CMake'
       uses: lukka/run-cmake@v10
       with:
-        configurePreset: 'windows-msvc-vs16'
-        buildPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'windows-msvc-vs16-release' || 'windows-msvc-vs16-debug' }}
-        testPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'test-windows-vs16-release' || 'test-windows-vs16-debug' }}
+        configurePreset: 'windows-msvc-vs17'
+        buildPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'windows-msvc-vs17-release' || 'windows-msvc-vs17-debug' }}
+        testPreset: ${{ startsWith(github.ref, 'refs/tags/') && 'test-windows-vs17-release' || 'test-windows-vs17-debug' }}
 
     - name: "Check file existence"
       uses: andstor/file-existence-action@v3
