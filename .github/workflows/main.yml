@@ -319,7 +319,7 @@ jobs:
       run: |
         brew install python-setuptools
         npm install
-        npm run p -- --ext_path="${{ github.workspace }}/build/src/" --dict_path="${{ github.workspace }}/test/dict/"
+        npm run p -- --ext_path="${{ github.workspace }}/build/src/" --dict_path="${{ github.workspace }}/build/test/dict/"
         # don't run this as it's toooo slow
         # npm run b -- --ext_path="${{ github.workspace }}/build/src/" --dict_path="${{ github.workspace }}/build/test/dict/"
 
@@ -343,7 +343,7 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         draft: true
-        files: "${{ github.workspace }}//build/libsimple-osx-x64.zip"
+        files: "${{ github.workspace }}/build/libsimple-osx-x64.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
