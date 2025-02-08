@@ -76,28 +76,23 @@ jobs:
         allow_failure: true
         files: "${{ github.workspace }}/build/src/${{ steps.build_type.outputs.BUILD_TYPE }}/simple.dll, ${{ github.workspace }}/build/cppjieba/src/cppjieba/dict/jieba.dict.utf8"
 
-    # can't build
     # npm run
-    # - uses: actions/setup-node@v2
-    #   with:
-    #     node-version: '16'
-    # - name: run node example
-    #   working-directory: ./examples/node/
-    #   run: |
-    #     npm install
-    #     npm run p -- --ext_path="${{ github.workspace }}/build/src/${{ steps.build_type.outputs.BUILD_TYPE }}/" --dict_path="${{ github.workspace }}/build/cppjieba/src/cppjieba/dict/"
-
-    # - name: 'Run CTest'
-    #   run: ctest -C ${{ env.BUILD_TYPE }}
-    #   working-directory: "${{ github.workspace }}/build"
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: run node example
+      working-directory: ./examples/node/
+      run: |
+        npm install
+        npm run p -- --ext_path="${{ github.workspace }}/build/src/" --dict_path="${{ github.workspace }}/build/test/dict/"
 
     # python run
-    # - uses: actions/setup-python@v4
-    #   with:
-    #     python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-    # - name: run python example
-    #   working-directory: ./examples/python3/
-    #   run: python db_connector.py "${{ github.workspace }}/build/src/${{ steps.build_type.outputs.BUILD_TYPE }}/simple"
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.10.8' # Version need < 3.11 https://github.com/actions/setup-python/issues/540
+    - name: run python example
+      working-directory: ./examples/python3/
+      run: python db_connector.py "${{ github.workspace }}/build/src/libsimple"
 
     - name: Package
       if: startsWith(github.ref, 'refs/tags/')
@@ -320,7 +315,7 @@ jobs:
     # python run
     - uses: actions/setup-python@v5
       with:
-        python-version: '3.13' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+        python-version: '3.10.8' # Version need < 3.11 https://github.com/actions/setup-python/issues/540
     - name: run python example
       working-directory: ./examples/python3/
       run: python db_connector.py "${{ github.workspace }}/build/src/libsimple"
