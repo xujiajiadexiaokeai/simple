@@ -60,11 +60,11 @@
       "displayName": "macOS Ninja",
       "description": "Configure for macOS build",
       "generator": "Ninja",
-      "binaryDir": "${sourceDir}/../../_temp/macos",
+      "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "CMAKE_INSTALL_PREFIX": {
           "type": "PATH",
-          "value": "${sourceDir}/../../_temp/macos/install"
+          "value": "${sourceDir}/build/install"
         }
       }
     },
@@ -74,8 +74,7 @@
       "description": "Configure with VS17 and vcpkg toolchain",
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
-      "toolset": "v143",
-      "binaryDir": "${sourceDir}/../../_temp/windows",
+      "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "CMAKE_TOOLCHAIN_FILE": {
           "type": "FILEPATH",

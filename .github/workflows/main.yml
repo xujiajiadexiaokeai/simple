@@ -74,30 +74,25 @@ jobs:
       uses: andstor/file-existence-action@v3
       with:
         allow_failure: true
-        files: "${{ github.workspace }}/../../_temp/windows/src/${{ steps.build_type.outputs.BUILD_TYPE }}/simple.dll, ${{ github.workspace }}/../../_temp/windows/cppjieba/src/cppjieba/dict/jieba.dict.utf8"
+        files: "${{ github.workspace }}/build/src/${{ steps.build_type.outputs.BUILD_TYPE }}/simple.dll, ${{ github.workspace }}/build/cppjieba/src/cppjieba/dict/jieba.dict.utf8"
 
-    # can't build
     # npm run
-    # - uses: actions/setup-node@v2
+    # - uses: actions/setup-node@v4
     #   with:
-    #     node-version: '16'
+    #     node-version: '20'
     # - name: run node example
     #   working-directory: ./examples/node/
     #   run: |
     #     npm install
-    #     npm run p -- --ext_path="${{ github.workspace }}/../../_temp/windows/src/${{ steps.build_type.outputs.BUILD_TYPE }}/" --dict_path="${{ github.workspace }}/../../_temp/windows/cppjieba/src/cppjieba/dict/"
-
-    # - name: 'Run CTest'
-    #   run: ctest -C ${{ env.BUILD_TYPE }}
-    #   working-directory: "${{ github.workspace }}/../../_temp/windows"
+    #     npm run p -- --ext_path="${{ github.workspace }}/build/src/" --dict_path="${{ github.workspace }}/build/test/dict/"
 
     # python run
-    # - uses: actions/setup-python@v4
-    #   with:
-    #     python-version: '3.x' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-    # - name: run python example
-    #   working-directory: ./examples/python3/
-    #   run: python db_connector.py "${{ github.workspace }}/../../_temp/windows/src/${{ steps.build_type.outputs.BUILD_TYPE }}/simple"
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.10.8' # Version need < 3.11 https://github.com/actions/setup-python/issues/540
+    - name: run python example
+      working-directory: ./examples/python3/
+      run: python db_connector.py "${{ github.workspace }}/build/src/${{ steps.build_type.outputs.BUILD_TYPE }}/simple.dll"
 
     - name: Package
       if: startsWith(github.ref, 'refs/tags/')
@@ -105,14 +100,14 @@ jobs:
         mkdir libsimple-windows-${{ matrix.arch }}
         Copy-Item -Path src/${{ steps.build_type.outputs.BUILD_TYPE }}/simple.dll,cppjieba/src/cppjieba/dict/ -Destination libsimple-windows-${{ matrix.arch }}/ -Recurse
         Compress-Archive -Path libsimple-windows-${{ matrix.arch }} -DestinationPath libsimple-windows-${{ matrix.arch }}.zip
-      working-directory: "${{ github.workspace }}/../../_temp/windows/"
+      working-directory: "${{ github.workspace }}/build/"
     - name: Release
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
         draft: true
-        files: "D:/a/_temp/windows/libsimple-windows-${{ matrix.arch }}.zip"
-        # files: "${{ github.workspace }}/../../_temp/windows/libsimple-windows-${{ matrix.arch }}.zip"
+        files: "D:/a/build/libsimple-windows-${{ matrix.arch }}.zip"
+        # files: "${{ github.workspace }}/build/libsimple-windows-${{ matrix.arch }}.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -298,36 +293,32 @@ jobs:
 
     - name: 'Run CTest'
       run: ctest -C ${{ env.BUILD_TYPE }}
-      working-directory: "${{ github.workspace }}/../../_temp/macos"
+      working-directory: "${{ github.workspace }}/build"
 
     - name: "Check file existence"
       uses: andstor/file-existence-action@v3
       with:
         allow_failure: true
-        files: "${{ github.workspace }}/../../_temp/macos/src/libsimple.dylib, ${{ github.workspace }}/../../_temp/macos/test/dict/jieba.dict.utf8"
+        files: "${{ github.workspace }}/build/src/libsimple.dylib, ${{ github.workspace }}/build/test/dict/jieba.dict.utf8"
     
+    # npm run
     - uses: actions/setup-node@v4
       with:
         node-version: '20'
-    
-    # - uses: actions/setup-python@v5
-    #   with:
-    #     python-version: '3.12' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-    # npm run
     - name: run node example
       working-directory: ./examples/node/
       run: |
         brew install python-setuptools
         npm install
-        npm run p -- --ext_path="${{ github.workspace }}/../../_temp/macos/src/" --dict_path="${{ github.workspace }}/../../_temp/macos/test/dict/"
-        # don't run this as it's toooo slow
-        # npm run b -- --ext_path="${{ github.workspace }}/../../_temp/macos/src/" --dict_path="${{ github.workspace }}/../../_temp/macos/test/dict/"
+        npm run p -- --ext_path="${{ github.workspace }}/build/src/" --dict_path="${{ github.workspace }}/build/test/dict/"
 
     # python run
+    # - uses: actions/setup-python@v5
+    #   with:
+    #     python-version: '3.10.8' # Version need < 3.11 https://github.com/actions/setup-python/issues/540
     # - name: run python example
     #   working-directory: ./examples/python3/
-    #   run: |
-    #     python db_connector.py "${{ github.workspace }}/../../_temp/macos/src/libsimple"
+    #   run: python db_connector.py "${{ github.workspace }}/build/src/libsimple"
   
     - name: Package
       if: startsWith(github.ref, 'refs/tags/')
@@ -336,14 +327,14 @@ jobs:
         sudo xattr -r -d com.apple.quarantine src/libsimple.dylib
         cp -r src/libsimple.dylib test/dict libsimple-osx-x64/
         zip -r libsimple-osx-x64.zip libsimple-osx-x64
-      working-directory: "${{ github.workspace }}/../../_temp/macos"
+      working-directory: "${{ github.workspace }}/build"
 
     - name: Release
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
         draft: true
-        files: "${{ github.workspace }}/../../_temp/macos/libsimple-osx-x64.zip"
+        files: "${{ github.workspace }}/build/libsimple-osx-x64.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
